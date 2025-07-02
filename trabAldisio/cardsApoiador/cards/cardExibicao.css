@@ -1,0 +1,99 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Rubik', sans-serif;
+}
+
+body {
+ background-color: #E41B45;
+  color: #0d162c;
+}
+.sessao {
+	padding: 20px;
+	margin: 20px auto;
+  width: 60%;
+  border-radius: 16px;
+  background-color: beige;
+	display: flex;
+	flex-direction: column;	
+}
+
+.sessao-titulo {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.container-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  gap: 80px;
+}
+
+.card-poke {
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-align: center;
+  height: 55vh;
+}
+
+.card:hover, .card-poke:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+}
+
+.card {
+  width: 220px;
+  background-color: #E41B45;
+  color: white;
+}
+
+.card h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.card-poke img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+}
+
+.sessao .container-cards a{
+	text-decoration: none;
+}
+.sessao .detalhes{
+	display: flex;
+}
+.sessao .detalhes .foto, .infos{
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.sessao .detalhes .foto img{
+	width: 100%;
+	height: 100%;
+}
+.sessao .detalhes .infos{
+	padding: 20px;
+}
+.btn-voltar {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #E41B45;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+	width: 60%;
+}
+
