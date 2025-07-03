@@ -6,7 +6,7 @@
 }
 
 body {
-  background-color: #f8f9fa;
+  background-color: #3b3b3b;
   color: #0d162c;
 }
 
@@ -55,7 +55,7 @@ body {
 
 .sessao {
   padding: 40px 20px;
-  background-color: #fff3e0;
+  background-color: #ffffff;
   margin: 20px auto;
   max-width: 1200px;
   border-radius: 16px;
