@@ -6,7 +6,7 @@
 }
 
 body {
- background-color: #E41B45;
+ background-color: #0D162C;
   color: #0d162c;
 }
 .sessao {
@@ -14,10 +14,10 @@ body {
 	margin: 20px auto;
   width: 60%;
   border-radius: 16px;
-  background-color: beige;
+  background-color: #E41B45;
 	display: flex;
 	flex-direction: column;	
-  border: 4px solid #0d162c;
+  border: 4px solid #8B5CF6;
 }
 
 .sessao-titulo {
@@ -89,7 +89,7 @@ body {
 .btn-voltar {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #E41B45;
+  background-color: #0D162C;
   color: white;
   text-decoration: none;
   border-radius: 8px;
@@ -98,3 +98,10 @@ body {
 	width: 60%;
 }
 
+.foto:hover, .card-poke:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 20px rgba(0,0,0,0.2);
+}
+.foto img{
+  border-radius: 20px;
+}
