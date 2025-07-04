@@ -13,7 +13,6 @@ body {
   flex-direction: column;
 }
 
-/* Navbar já existente */
 .navbar {
   background-color: #E41B45;
   display: flex;
@@ -59,7 +58,6 @@ body {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-/* Container de login */
 .login-container {
   flex: 1;
   display: flex;
@@ -69,13 +67,11 @@ body {
   padding: 40px 20px;
 }
 
-/* Logo central */
 .logo-login img {
   width: 230px;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
 
-/* Formulário */
 .login-form {
   background-color: #fff;
   padding: 40px 30px;
@@ -95,7 +91,6 @@ body {
   text-align: center;
 }
 
-/* Grupos de input */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -120,7 +115,6 @@ body {
   border-color: #E41B45;
 }
 
-/* Ações: botão + link */
 .login-actions {
   display: flex;
   flex-direction: column;
@@ -128,7 +122,6 @@ body {
   gap: 8px;
 }
 
-/* Botão de login */
 .login-button {
   background-color: #ffd814;
   color: #111;
@@ -146,7 +139,6 @@ body {
   background-color: #f7ca00;
 }
 
-/* Link: esqueceu a senha */
 .forgot-password {
   font-size: 14px;
   color: #E41B45;
@@ -159,7 +151,6 @@ body {
   color: #b8002c;
 }
 
-/* Criar conta como botão */
 .register-link {
   display: inline-block;
   margin-top: 10px;
@@ -180,7 +171,6 @@ body {
   background-color: #c7c7c7;
 }
 
-/* Responsivo */
 @media (max-width: 480px) {
   .login-form {
     padding: 30px 20px;
