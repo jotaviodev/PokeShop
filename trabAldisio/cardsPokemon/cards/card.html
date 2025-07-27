@@ -8,7 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet"/>
   <script>
     window.addEventListener('load', async ()=>{
-      let div = document.getElementsByClassName('infos')[0]
+      let divInfos = document.getElementsByClassName('infos')[0]
+      let divfoto = document.getElementsByClassName('foto')[0]
       let dadosCard 
       let dados = await fetch('http://127.0.0.1:5000/cards/1')
                 .then(response => {
@@ -19,7 +20,7 @@
                 }).then(data => {
                   dadosCard = data
       })
-      div.innerHTML = `
+      divInfos.innerHTML = `
         <h1 class="titulo-carta">${dadosCard.nome}</h1>
         <h3>Coleção:</h3>
         <p>${dadosCard.colecao}</p>
@@ -31,6 +32,9 @@
         <p>R$ ${dadosCard.valor}</p>
         <a href="../cardsPokemon.html" class="btn-voltar">Adicionar ao Carrinho</a>
       `
+      divfoto.innerHTML = `
+        <img src="${dadosCard.url_imagem}" alt="${dadosCard.nome}"/>
+      `
     })
   </script>
 </head>
@@ -38,7 +42,6 @@
   <section class="sessao">
     <div class="detalhes">
       <div class="foto">
-        <img src="https://img.mypcards.com/img/2/1352/pokemon_viv_025/pokemon_viv_025_pt.jpg" alt="Charizard"/>
       </div>
       <div class="infos" id="infos">
         <a href="../cardsPokemon.html" class="btn-voltar">Adicionar ao Carrinho</a>

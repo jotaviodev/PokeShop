@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cartas tipo Pokémon</title>
+  <link rel="stylesheet" href="cardsCategoria.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script>
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    const categoria = params.get('categoria');
+    
+    window.addEventListener('load', async ()=>{
+      let div = document.getElementsByClassName('sessao-titulo')[0]
+      let divContainer = document.getElementsByClassName('container-cards')[0]
+      div.innerText += categoria
+      let datas
+      let dados = await fetch(`http://127.0.0.1:5000/cards/categoria/${categoria}`)
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error(response.status);
+                  }
+                  return response.json();
+                }).then(data => {
+                  datas = data
+                  console.log(datas)
+      })
+      datas.cards.map((categoria)=>{
+        console.log(1)
+        divContainer.innerHTML += `
+        <a href="card.html?id=${categoria.id}">
+            <div class="card-poke">
+                <img src="${categoria.url_imagem}" alt="${categoria.nome}"/>
+            </div>
+        </a>
+      `
+      })
+    })
+  </script>
+</head>
+<body>
+  <nav class="navbar">
+      <div class="logo">
+          <a href="../index.html"><img src="../assets/pokelogo.png" alt="Logo"/></a>
+      </div>
+      <div class="nav-item">
+          <div class="nav-sessao">
+              <a href="../pages/cart.html" title="Carrinho">
+                  <i class="fa-solid fa-cart-shopping"></i>
+                  <span>Carrinho</span>
+              </a>
+          </div>
+          <div class="nav-sessao">
+              <a href="../auth/signIn.html">Entrar</a>
+          </div>
+          <div class="nav-sessao">
+              <a href="../auth/signUp.html">Criar conta</a>
+          </div>
+      </div>
+  </nav>
+
+  <section class="sessao">
+    <h1 class="sessao-titulo"></h1>
+    <div class="container-cards">
+      <!-- <a href="./cards/card1.html">
+        <div class="card-poke">
+            <img src="https://img.mypcards.com/img/2/1352/pokemon_viv_025/pokemon_viv_025_pt.jpg" alt="Charizard (025/185)"/>
+        </div>
+      </a>
+      <a href="./cards/card2.html">
+        <div class="card-poke">
+            <img src="https://img.mypcards.com/img/2/1250/pokemon_swshp_swsh039/pokemon_swshp_swsh039_pt.jpg" alt="Pikachu (SWSH039)"/>
+        </div>
+      </a>
+      <a href="./cards/card3.html">
+        <div class="card-poke">
+            <img src="https://img.mypcards.com/img/2/1769/pokemon_crz_059_159/pokemon_crz_059_159_en.jpg" alt="Mewtwo (059/159)"/>
+        </div>
+      </a>
+      <a href="./cards/card4.html">
+        <div class="card-poke">
+            <img src="https://img.mypcards.com/img/2/203/pokemon_sum_101_149/pokemon_sum_101_149_en.jpg" alt="Eevee (101/149)"/>
+        </div>
+      </a> -->
+    </div>
+  </section>
+</body>
+</html>
