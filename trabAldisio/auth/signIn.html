@@ -6,6 +6,39 @@
     <link rel="stylesheet" href="./signIn.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
+    <style>
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        .input-error {
+            border: 2px solid #e74c3c !important;
+        }
+        .input-success {
+            border: 2px solid #27ae60 !important;
+        }
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        .loading-spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script src="../js/api.js"></script>
     <title>Login - PokeShop</title>
 </head>
 <body>
@@ -29,7 +62,7 @@
     </nav>
 
     <div class="login-container">
-        <form class="login-form" method="get">
+        <form class="login-form" method="get" id="signInForm">
             <div class="logo-login">
                 <a href="../index.html">
                     <img src="../assets/pokelogo.png" alt="Logo PokeShop"/>
@@ -39,10 +72,12 @@
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
+                <div class="error-message" id="email-error"></div>
             </div>
             <div class="form-group">
                 <label for="password">Senha:</label>
                 <input type="password" id="password" name="password" required>
+                <div class="error-message" id="password-error"></div>
             </div>
             <div class="login-actions">
                 <a href="#" class="forgot-password">Esqueceu a senha?</a>
@@ -52,6 +87,114 @@
         </form>
     </div>
 
-    
+    <script>
+        document.getElementById('email').addEventListener('blur', function() {
+            const email = this.value.trim();
+            if (!email) {
+                FormValidator.showError('email', 'Email é obrigatório');
+            } else if (!FormValidator.validateEmail(email)) {
+                FormValidator.showError('email', 'Email inválido');
+            } else {
+                FormValidator.showSuccess('email');
+            }
+        });
+
+        document.getElementById('email').addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                FormValidator.clearValidation('email');
+            }
+        });
+
+        document.getElementById('password').addEventListener('blur', function() {
+            const password = this.value;
+            if (!password) {
+                FormValidator.showError('password', 'Senha é obrigatória');
+            } else if (!FormValidator.validatePassword(password)) {
+                FormValidator.showError('password', 'Senha deve ter pelo menos 6 caracteres');
+            } else {
+                FormValidator.showSuccess('password');
+            }
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            if (this.value === '') {
+                FormValidator.clearValidation('password');
+            }
+        });
+
+        document.getElementById('signInForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            let isValid = true;
+            const submitBtn = this.querySelector('.login-button');
+            
+            const email = document.getElementById('email').value.trim();
+            if (!email) {
+                FormValidator.showError('email', 'Email é obrigatório');
+                isValid = false;
+            } else if (!FormValidator.validateEmail(email)) {
+                FormValidator.showError('email', 'Email inválido');
+                isValid = false;
+            } else {
+                FormValidator.showSuccess('email');
+            }
+
+            const password = document.getElementById('password').value;
+            if (!password) {
+                FormValidator.showError('password', 'Senha é obrigatória');
+                isValid = false;
+            } else if (!FormValidator.validatePassword(password)) {
+                FormValidator.showError('password', 'Senha deve ter pelo menos 6 caracteres');
+                isValid = false;
+            } else {
+                FormValidator.showSuccess('password');
+            }
+
+            if (!isValid) {
+                NotificationManager.show('Por favor, corrija os erros no formulário antes de continuar.', 'error');
+                return;
+            }
+
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = '<div class="loading-spinner"></div>Entrando...';
+            submitBtn.disabled = true;
+
+            try {
+                const result = await ApiClient.login(email, password);
+                
+                AuthManager.saveToken(result.access_token);
+                
+                NotificationManager.show('Login realizado com sucesso!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = '../pages/cart.html';
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Erro na autenticação:', error);
+                FormValidator.showError('password', 'Email ou senha incorretos');
+                NotificationManager.show('Credenciais inválidas. Tente novamente.', 'error');
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.innerHTML = 'Entrar';
+                submitBtn.disabled = false;
+            }
+        });
+
+        document.querySelector('.forgot-password').addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            
+            if (!email) {
+                NotificationManager.show('Por favor, digite seu email primeiro.', 'warning');
+                document.getElementById('email').focus();
+            } else if (!FormValidator.validateEmail(email)) {
+                NotificationManager.show('Por favor, digite um email válido.', 'warning');
+                document.getElementById('email').focus();
+            } else {
+                NotificationManager.show('Um link de recuperação foi enviado para: ' + email, 'info');
+            }
+        });
+    </script>
 </body>
 </html>

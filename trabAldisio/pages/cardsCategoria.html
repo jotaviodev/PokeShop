@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="cardsCategoria.css" />
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="../js/api.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="../js/common.js"></script>
   <script>
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
@@ -16,28 +19,136 @@
       let div = document.getElementsByClassName('sessao-titulo')[0]
       let divContainer = document.getElementsByClassName('container-cards')[0]
       div.innerText += categoria
-      let datas
-      let dados = await fetch(`http://127.0.0.1:5000/cards/categoria/${categoria}`)
-                .then(response => {
-                  if (!response.ok) {
-                    throw new Error(response.status);
-                  }
-                  return response.json();
-                }).then(data => {
-                  datas = data
-                  console.log(datas)
-      })
-      datas.cards.map((categoria)=>{
-        console.log(1)
-        divContainer.innerHTML += `
-        <a href="card.html?id=${categoria.id}">
-            <div class="card-poke">
-                <img src="${categoria.url_imagem}" alt="${categoria.nome}"/>
+      
+      try {
+        const datas = await ApiClient.getCardsByCategoria(categoria);
+        
+        if (datas && datas.cards && datas.cards.length > 0) {
+          datas.cards.map((card)=>{
+            divContainer.innerHTML += `
+            <a href="card.html?id=${card.id}">
+                <div class="card-poke">
+                    <img src="${card.url_imagem}" alt="${card.nome}"/>
+                    <div class="card-info" style="padding: 10px; text-align: center;">
+                        <h3 style="margin: 5px 0; font-size: 14px;">${card.nome}</h3>
+                        <p style="margin: 5px 0; color: #666; font-size: 12px;">${card.tipo}</p>
+                        <p style="margin: 5px 0; font-weight: bold; color: #27ae60;">R$ ${card.valor ? card.valor.toFixed(2).replace('.', ',') : '0,00'}</p>
+                        <button onclick="addToCart(${card.id}, '${card.nome}', ${card.valor || 0}, '${card.url_imagem}', event)" 
+                                style="background: #3498db; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px; margin-top: 5px;">
+                            <i class="fa-solid fa-cart-plus"></i> Adicionar
+                        </button>
+                    </div>
+                </div>
+            </a>
+          `
+          })
+        } else {
+          divContainer.innerHTML = `
+            <div style="text-align: center; padding: 50px; color: #666;">
+              <h3>Nenhum produto encontrado nesta categoria</h3>
+              <p>Tente navegar para outras categorias ou volte mais tarde.</p>
             </div>
-        </a>
-      `
-      })
-    })
+          `;
+        }
+      } catch (error) {
+        console.error('Erro ao carregar produtos:', error);
+        NotificationManager.show('Erro ao carregar produtos desta categoria', 'error');
+        divContainer.innerHTML = `
+          <div style="text-align: center; padding: 50px; color: #666;">
+            <h3>Erro ao carregar produtos</h3>
+            <p>Ocorreu um erro ao carregar os produtos. Tente novamente mais tarde.</p>
+          </div>
+        `;
+      }
+    });
+
+    function addToCart(id, nome, valor, imagem, event) {
+      event.preventDefault();
+      event.stopPropagation();
+      
+      const product = {
+        id: id,
+        nome: nome,
+        valor: valor,
+        url_imagem: imagem
+      };
+      
+      CartManager.addItem(product);
+      NotificationManager.show(`${nome} adicionado ao carrinho!`, 'success');
+    }
+  </script>
+          `
+          })
+        } else {
+          divContainer.innerHTML = `
+            <div style="text-align: center; padding: 50px; color: #666;">
+              <i class="fa-solid fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 20px;"></i>
+              <h3>Nenhum produto encontrado</h3>
+              <p>Não há produtos disponíveis nesta categoria no momento.</p>
+              <a href="../index.html" style="color: #3498db; text-decoration: none;">← Voltar à página inicial</a>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Erro ao carregar produtos:', error);
+        divContainer.innerHTML = `
+          <div style="text-align: center; padding: 50px; color: #e74c3c;">
+            <i class="fa-solid fa-exclamation-circle" style="font-size: 48px; margin-bottom: 20px;"></i>
+            <h3>Erro ao carregar produtos</h3>
+            <p>Não foi possível conectar ao servidor. Tente novamente mais tarde.</p>
+            <a href="../index.html" style="color: #3498db; text-decoration: none;">← Voltar à página inicial</a>
+          </div>
+        `;
+      }
+    });
+
+    // Função para adicionar item ao carrinho
+    function addToCart(id, nome, preco, imagem, event) {
+      event.preventDefault();
+      event.stopPropagation();
+      
+      // Verificar se usuário está logado
+      const user = localStorage.getItem('user');
+      if (!user) {
+        alert('Você precisa fazer login para adicionar itens ao carrinho.');
+        window.location.href = '../auth/signIn.html';
+        return;
+      }
+
+      // Simular adição ao carrinho
+      const item = {
+        id: id,
+        nome: nome,
+        preco: preco,
+        imagem: imagem,
+        quantidade: 1
+      };
+
+      // Aqui você pode salvar no localStorage ou enviar para o backend
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const existingItem = cart.find(item => item.id === id);
+      
+      if (existingItem) {
+        existingItem.quantidade += 1;
+      } else {
+        cart.push(item);
+      }
+      
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      // Feedback visual
+      const button = event.target;
+      const originalText = button.innerHTML;
+      button.innerHTML = '<i class="fa-solid fa-check"></i> Adicionado!';
+      button.style.background = '#27ae60';
+      
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.style.background = '#3498db';
+      }, 2000);
+      
+      alert(`${nome} foi adicionado ao seu carrinho!`);
+    }
   </script>
 </head>
 <body>
@@ -50,6 +161,7 @@
               <a href="../pages/cart.html" title="Carrinho">
                   <i class="fa-solid fa-cart-shopping"></i>
                   <span>Carrinho</span>
+                  <span class="cart-counter" style="background: #e74c3c; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; margin-left: 5px; display: none;">0</span>
               </a>
           </div>
           <div class="nav-sessao">
