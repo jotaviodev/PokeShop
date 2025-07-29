@@ -29,7 +29,7 @@
     </nav>
 
     <div class="login-container">
-        <form class="login-form" method="get">
+        <form class="login-form" method="post">
         <div class="logo-login">
             <a href="../index.html">
             <img src="../assets/pokelogo.png" alt="Logo PokeShop" />
@@ -63,7 +63,7 @@
                     <label><input type="radio" name="gender" value="Outro" /> Outro</label>
                 </div>
             </div>
-        </div>
+        </div>      
 
         <div class="form-group">
             <label for="birthdate">Data de Nascimento:</label>
@@ -138,5 +138,88 @@
         <a href="./signIn.html" class="register-link">Já tenho uma conta</a>
         </form>
     </div>
+    <script>
+        document.querySelector('.login-form').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const fullname = document.getElementById('fullname').value.trim();
+        const cpf = document.getElementById('cpf').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const gender = document.querySelector('input[name="gender"]:checked')?.value;
+        const birthdate = document.getElementById('birthdate').value;
+        const email = document.getElementById('email').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const state = document.getElementById('state').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        const errors = [];
+
+        if (cpf.length !== 11 || !/^\d+$/.test(cpf)) {
+            errors.push('CPF deve conter 11 números.');
+        }
+
+        if (!/^\d{11}$/.test(phone)) {
+            errors.push('Telefone deve conter exatamente 11 dígitos numéricos.');
+        }
+
+        if (!gender) {
+            errors.push('Selecione um gênero.');
+        }
+
+        if (!birthdate) {
+            errors.push('Informe a data de nascimento.');
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            errors.push('Email inválido.');
+        }
+
+        if (password !== confirmPassword) {
+            errors.push('As senhas não coincidem.');
+        }
+
+        if (errors.length > 0) {
+            alert(errors.join('\n'));
+            return;
+        }
+
+        const payload = {
+            "nome": fullname,
+            "email": email,
+            "cpf": cpf,
+            "telefone": phone,
+            "genero": gender,
+            "data_nasc": birthdate,
+            "endereco": address,
+            "cidade": city,
+            "estado": state,
+            "senha": password
+        }
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/usuarios', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+            alert('Cadastro realizado com sucesso!');
+            window.location.href = './signIn.html';
+            } else {
+            const data = await response.json();
+            alert('Erro ao cadastrar: ' + (data.message || 'Tente novamente.'));
+            }
+        } catch (error) {
+            alert('Erro de conexão com a API.');
+            console.error(error);
+        }
+        });
+        </script>
+
 </body>
 </html>

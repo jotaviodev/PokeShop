@@ -51,7 +51,42 @@
             <a href="./signUp.html" class="register-link">Criar uma conta</a>
         </form>
     </div>
+    <script>
+        document.querySelector('.login-form').addEventListener('submit', async function (event) {
+        event.preventDefault();
 
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+
+        const dados = {
+            "email": email,
+            "senha": password
+        }
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dados),
+            });
+
+            if (response.ok) {
+            alert('Login realizado com sucesso!');
+            const data = await response.json();
+            window.location.href = `../pages/cart.html?${data.access_token}`
+            } else {
+            const data = await response.json();
+            alert('Erro: Email ou senha incorretos');
+            }
+        } catch (error) {
+            alert('Erro de conexão com a API.');
+            console.error(error);
+        }
+        });
+        </script>
     
 </body>
 </html>
