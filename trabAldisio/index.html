@@ -9,6 +9,39 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"> 
   <script src="./js/api.js"></script>
   <script src="./js/common.js"></script>
+  <style>
+    .card-poke:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
+    
+    .top-cards-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .top-cards-container .card-poke {
+      flex: 0 1 200px;
+      max-width: 220px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: white;
+    }
+    
+    .top-cards-container .card-poke img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
   <script>
     window.addEventListener('load', async ()=>{
       let div = document.getElementsByClassName('container-cards')[0]
@@ -140,22 +173,24 @@
 
   <section class="sessao">
     <h1 class="sessao-titulo">2. Top 5 Cartas Mais Vendidas</h1>
-    <p style="color: red; margin: 5px;">Produtos esgotados, apenas exibição!</p>
-    <div class="container-cards">
+    <p style="color: #e74c3c; margin: 10px 0; text-align: center; font-weight: bold; font-size: 14px;">
+      <i class="fa-solid fa-exclamation-triangle"></i> Produtos esgotados, apenas exibição!
+    </p>
+    <div class="top-cards-container">
       <div class="card-poke">
-        <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/prismatic-evolutions/pt-br/SV8pt5_PTBR_6-2x.png"/>
+        <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/prismatic-evolutions/pt-br/SV8pt5_PTBR_6-2x.png" alt="Carta Pokémon - Top 1"/>
       </div>
       <div class="card-poke">
-        <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/prismatic-evolutions/pt-br/SV8pt5_PTBR_14-2x.png"/>
+        <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/prismatic-evolutions/pt-br/SV8pt5_PTBR_14-2x.png" alt="Carta Pokémon - Top 2"/>
       </div>
       <div class="card-poke">
-        <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/prismatic-evolutions/pt-br/SV8pt5_PTBR_23-2x.png"/>
+        <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/prismatic-evolutions/pt-br/SV8pt5_PTBR_23-2x.png" alt="Carta Pokémon - Top 3"/>
       </div>
       <div class="card-poke">
-        <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/prismatic-evolutions/pt-br/SV8pt5_PTBR_26-2x.png"/>
+        <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/prismatic-evolutions/pt-br/SV8pt5_PTBR_26-2x.png" alt="Carta Pokémon - Top 4"/>
       </div>
       <div class="card-poke">
-        <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/prismatic-evolutions/pt-br/SV8pt5_PTBR_60-2x.png"/>
+        <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/prismatic-evolutions/pt-br/SV8pt5_PTBR_60-2x.png" alt="Carta Pokémon - Top 5"/>
       </div>
     </div>
   </section>
