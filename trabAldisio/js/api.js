@@ -1,4 +1,3 @@
-// Configuração da API
 const API_BASE_URL = 'http://127.0.0.1:5000';
 
 class ApiClient {
@@ -48,19 +47,13 @@ class ApiClient {
         });
     }
 
-    static async registrar(nome, email, senha) {
+    static async registrar(userData) {
         return await ApiClient.request('/usuarios', {
             method: 'POST',
-            body: JSON.stringify({ nome, email, senha })
+            body: JSON.stringify(userData)
         });
     }
 
-    static async getPerfil() {
-        return await ApiClient.request('/perfil', {
-            method: 'GET',
-            auth: true
-        });
-    }
     static async getCards() {
         return await ApiClient.request('/cards');
     }

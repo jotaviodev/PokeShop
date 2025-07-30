@@ -49,12 +49,12 @@
       
       try {
         categorias = await ApiClient.getCategorias();
-        
+
         categorias.map((categoria)=>{
           div.innerHTML += `
           <a href="./pages/cardsCategoria.html?categoria=${categoria.nome}">
           <div class="card">
-            <h2>Cartas tipo ${categoria.nome}</h2>
+            <h2> ${categoria.nome}</h2>
             <img src="${categoria.url_imagem}"/>
           </div>
           </a>
@@ -76,21 +76,32 @@
               <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/destined-rivals/pt-br/SV10_PTBR_104-2x.png"/>
             </div>
           </a>
-          <a href="./cardsItem/cardsItem.html">
-            <div class="card">
-              <h2>Cartas tipo Item</h2>
-              <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/battle-partners/pt-br/SV9_PTBR_130-2x.png"/>
-            </div>
-          </a>
           <a href="./cardsApoiador/cardsApoiador.html">
             <div class="card">
               <h2>Cartas tipo Apoiador</h2>
-              <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/battle-partners/pt-br/SV9_PTBR_198-2x.png"/>
+              <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/destined-rivals/pt-br/SV10_PTBR_170-2x.png"/>
+            </div>
+          </a>
+          <a href="./cardsItem/cardsItem.html">
+            <div class="card">
+              <h2>Cartas tipo Item</h2>
+              <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/destined-rivals/pt-br/SV10_PTBR_179-2x.png"/>
             </div>
           </a>
         `;
       }
     })
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('token');
+      if (token) {
+          document.getElementById('auth-buttons').style.display = 'none';
+          document.getElementById('logout-btn').style.display = 'flex';
+      } else {
+          document.getElementById('auth-buttons').style.display = 'flex';
+          document.getElementById('logout-btn').style.display = 'none';
+      }
+  });
 
     function checkUserLogin() {
       const user = localStorage.getItem('user');
@@ -125,17 +136,15 @@
                 <a href="./pages/cart.html" title="Carrinho">
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span>Carrinho</span>
-                    <span class="cart-counter" style="background: #e74c3c; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; margin-left: 5px; display: none;">0</span>
                 </a>
             </div>
             <div class="nav-sessao">
                 <a href="./auth/signIn.html" id="loginLink">Entrar</a>
             </div>
             <div class="nav-sessao">
-                <a href="./auth/signUp.html" id="registerLink">Criar conta</a>
+              <a href="./auth/signUp.html" id="registerLink">Criar conta</a>
             </div>
-            <div class="nav-sessao" id="userMenu" style="display: none;">
-                <span id="userNameNav">Olá, </span>
+            <div class="logout-btn" id="userMenu">
                 <a href="#" onclick="logout()" id="logoutLink">Sair</a>
             </div>
         </div>
@@ -144,7 +153,8 @@
   <section class="sessao">
     <h1 class="sessao-titulo">1. Categorias e Cartas Disponíveis</h1>
     <div class="container-cards">
-      <!-- <a href="./cardsEnergia/cardsEstadio.html">
+      <!--
+      <a href="./cardsEnergia/cardsEstadio.html">
         <div class="card">
           <h2>Cartas tipo Estádio</h2>
           <img src="https://assets.pokemon.com/static-assets/content-assets/cms2-pt-br/img/cards/web/SWSH11/SWSH11_PT-BR_171.png"/>
@@ -167,7 +177,8 @@
           <h2>Cartas tipo Item</h2>
           <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/destined-rivals/pt-br/SV10_PTBR_179-2x.png"/>
         </div>
-      </a> -->
+      </a>
+      -->
     </div>
   </section>
 

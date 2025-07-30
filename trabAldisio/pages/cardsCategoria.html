@@ -22,33 +22,18 @@
       try {
         const datas = await ApiClient.getCardsByCategoria(categoria);
         
-        if (datas && datas.cards && datas.cards.length > 0) {
           datas.cards.map((card)=>{
             divContainer.innerHTML += `
             <a href="card.html?id=${card.id}">
                 <div class="card-poke">
                     <img src="${card.url_imagem}" alt="${card.nome}"/>
                     <div class="card-info" style="padding: 10px; text-align: center;">
-                        <h3 style="margin: 5px 0; font-size: 14px;">${card.nome}</h3>
-                        <p style="margin: 5px 0; color: #666; font-size: 12px;">${card.tipo}</p>
-                        <p style="margin: 5px 0; font-weight: bold; color: #27ae60;">R$ ${card.valor ? card.valor.toFixed(2).replace('.', ',') : '0,00'}</p>
-                        <button onclick="addToCart(${card.id}, '${card.nome}', ${card.valor || 0}, '${card.url_imagem}', event)" 
-                                style="background: #3498db; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px; margin-top: 5px;">
-                            <i class="fa-solid fa-cart-plus"></i> Adicionar
-                        </button>
                     </div>
                 </div>
             </a>
           `
           })
-        } else {
-          divContainer.innerHTML = `
-            <div style="text-align: center; padding: 50px; color: #666;">
-              <h3>Nenhum produto encontrado nesta categoria</h3>
-              <p>Tente navegar para outras categorias ou volte mais tarde.</p>
-            </div>
-          `;
-        }
+        
       } catch (error) {
         console.error('Erro ao carregar produtos:', error);
         NotificationManager.show('Erro ao carregar produtos desta categoria', 'error');
@@ -61,20 +46,6 @@
       }
     });
 
-    function addToCart(id, nome, valor, imagem, event) {
-      event.preventDefault();
-      event.stopPropagation();
-      
-      const product = {
-        id: id,
-        nome: nome,
-        valor: valor,
-        url_imagem: imagem
-      };
-      
-      CartManager.addItem(product);
-      NotificationManager.show(`${nome} adicionado ao carrinho!`, 'success');
-    }
   </script>
 </head>
 <body>
@@ -87,7 +58,6 @@
               <a href="../pages/cart.html" title="Carrinho">
                   <i class="fa-solid fa-cart-shopping"></i>
                   <span>Carrinho</span>
-                  <span class="cart-counter" style="background: #e74c3c; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; margin-left: 5px; display: none;">0</span>
               </a>
           </div>
           <div class="nav-sessao">

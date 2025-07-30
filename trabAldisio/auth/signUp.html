@@ -185,28 +185,7 @@
     <script>
         function validateCPF(cpf) {
             cpf = cpf.replace(/[^\d]/g, '');
-            
-            if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-                return false;
-            }
-
-            let sum = 0;
-            for (let i = 0; i < 9; i++) {
-                sum += parseInt(cpf.charAt(i)) * (10 - i);
-            }
-            let remainder = (sum * 10) % 11;
-            if (remainder === 10 || remainder === 11) remainder = 0;
-            if (remainder !== parseInt(cpf.charAt(9))) return false;
-
-            sum = 0;
-            for (let i = 0; i < 10; i++) {
-                sum += parseInt(cpf.charAt(i)) * (11 - i);
-            }
-            remainder = (sum * 10) % 11;
-            if (remainder === 10 || remainder === 11) remainder = 0;
-            if (remainder !== parseInt(cpf.charAt(10))) return false;
-
-            return true;
+            return cpf.length === 11;
         }
 
         function validatePhone(phone) {
@@ -219,10 +198,6 @@
             const birth = new Date(birthdate);
             let age = today.getFullYear() - birth.getFullYear();
             const monthDiff = today.getMonth() - birth.getMonth();
-            
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-                age--;
-            }
             
             return age >= 13;
         }
@@ -376,30 +351,55 @@
             submitBtn.innerHTML = '<div class="loading-spinner"></div>Cadastrando...';
             submitBtn.disabled = true;
 
-            try {
-                const result = await ApiClient.registrar(fullname, email, password);
-                
-                NotificationManager.show('Cadastro realizado com sucesso!', 'success');
-                console.log('Dados salvos:', result);
-                
-                setTimeout(() => {
-                    window.location.href = './signIn.html';
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Erro no cadastro:', error);
-                
-                if (error.message.includes('já cadastrado')) {
-                    FormValidator.showError('email', 'Este email já está cadastrado');
-                    NotificationManager.show('Este email já está cadastrado', 'error');
-                } else {
-                    NotificationManager.show('Erro no cadastro: ' + error.message, 'error');
-                }
-            } finally {
-                submitBtn.classList.remove('loading');
-                submitBtn.innerHTML = 'Cadastrar';
-                submitBtn.disabled = false;
+        try {
+            const nome = document.getElementById('fullname').value.trim();
+            const cpf = document.getElementById('cpf').value;
+            const telefone = document.getElementById('phone').value;
+            const genero = document.querySelector('input[name="gender"]:checked')?.value || "";
+            const data_nascimento = document.getElementById('birthdate').value;
+            const email = document.getElementById('email').value;
+            const endereco = document.getElementById('address').value;
+            const cidade = document.getElementById('city').value;
+            const estado = document.getElementById('state').value;
+            const senha = document.getElementById('password').value;
+
+
+            const userData = {
+                nome: nome,
+                cpf: cpf,
+                telefone: telefone,
+                genero: genero,
+                data_nascimento: data_nascimento,
+                email: email,
+                endereco: endereco,
+                cidade: cidade,
+                estado: estado,
+                senha: senha
+            };
+
+            const result = await ApiClient.registrar(userData);
+
+            NotificationManager.show('Cadastro realizado com sucesso!', 'success');
+            console.log('Dados salvos:', result);
+
+            setTimeout(() => {
+                window.location.href = './signIn.html';
+            }, 2000);
+
+        } catch (error) {
+            console.error('Erro no cadastro:', error);
+
+            if (error.message.includes('já cadastrado')) {
+                FormValidator.showError('email', 'Este email já está cadastrado');
+                NotificationManager.show('Este email já está cadastrado', 'error');
+            } else {
+                NotificationManager.show('Erro no cadastro: ' + error.message, 'error');
             }
+        } finally {
+            submitBtn.classList.remove('loading');
+            submitBtn.innerHTML = 'Cadastrar';
+            submitBtn.disabled = false;
+        }
         });
     </script>
 </body>

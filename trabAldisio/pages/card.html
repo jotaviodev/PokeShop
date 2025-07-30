@@ -3,120 +3,56 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Detalhes do Produto</title>
+  <title>Charizard</title>
   <link rel="stylesheet" href="./cardExibicao.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet"/>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <script src="../js/api.js"></script>
-  <script src="../js/common.js"></script>
-</head>
-<body>
-  <nav class="navbar">
-    <div class="logo">
-      <a href="../index.html">
-        <img src="../assets/pokelogo.png" alt="Logo PokeShop" />
-      </a>
-    </div>
-    <div class="nav-item">
-      <div class="nav-sessao">
-        <a href="./cart.html" title="Carrinho">
-          <i class="fa-solid fa-cart-shopping"></i>
-          <span>Carrinho</span>
-          <span class="cart-counter" style="
-            background: #e74c3c;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            position: absolute;
-            top: -8px;
-            right: -8px;
-          ">0</span>
-        </a>
-      </div>
-      <div class="nav-sessao">
-        <a href="../auth/signIn.html">Login</a>
-      </div>
-    </div>
-  </nav>
-
-  <div class="container">
-    <div class="foto">
-    </div>
-    <div class="infos">
-    </div>
-  </div>
-
   <script>
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
     const id = params.get('id');
-    let currentCard = null;
 
     window.addEventListener('load', async ()=>{
       let divInfos = document.getElementsByClassName('infos')[0]
       let divfoto = document.getElementsByClassName('foto')[0]
-      
-      try {
-        currentCard = await ApiClient.getCardById(id);
-        
-        if (currentCard) {
-          document.title = currentCard.nome;
-          
-          divInfos.innerHTML = `
-            <h1 class="titulo-carta">${currentCard.nome}</h1>
-            <h3>Coleção:</h3>
-            <p>${currentCard.colecao}</p>
-            <h3>Raridade:</h3>
-            <p>${currentCard.raridade}</p>
-            <h3>Tipo:</h3>
-            <p>${currentCard.tipo}</p>
-            <h3>Valor estimado:</h3>
-            <p style="font-size: 18px; color: #27ae60; font-weight: bold;">R$ ${currentCard.valor ? currentCard.valor.toFixed(2).replace('.', ',') : '0,00'}</p>
-            <h3>Categoria:</h3>
-            <p>${currentCard.categoria}</p>
-            <div style="margin-top: 20px;">
-              <button onclick="addToCart()" class="btn-voltar" style="background: #27ae60; margin-right: 10px; cursor: pointer; border: none;">
-                <i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho
-              </button>
-              <a href="javascript:history.back()" class="btn-voltar" style="background: #3498db;">
-                <i class="fa-solid fa-arrow-left"></i> Voltar
-              </a>
-            </div>
-          `;
-          
-          divfoto.innerHTML = `<img src="${currentCard.url_imagem}" alt="${currentCard.nome}"/>`;
-        }
-      } catch (error) {
-        console.error('Erro ao carregar detalhes do produto:', error);
-        NotificationManager.show('Erro ao carregar detalhes do produto', 'error');
-        
-        divInfos.innerHTML = `
-          <div style="text-align: center; padding: 50px; color: #666;">
-            <h3>Produto não encontrado</h3>
-            <p>Ocorreu um erro ao carregar os detalhes do produto.</p>
-            <a href="javascript:history.back()" class="btn-voltar" style="background: #3498db;">
-              <i class="fa-solid fa-arrow-left"></i> Voltar
-            </a>
-          </div>
-        `;
-      }
-    });
-
-    function addToCart() {
-      if (currentCard) {
-        CartManager.addItem(currentCard);
-        NotificationManager.show(`${currentCard.nome} adicionado ao carrinho!`, 'success');
-        
-        if (confirm('Deseja ir para o carrinho agora?')) {
-          window.location.href = 'cart.html';
-        }
-      }
-    }
+      let dadosCard 
+      let dados = await fetch(`http://127.0.0.1:5000/cards/${id}`)
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error(response.status);
+                  }
+                  return response.json();
+                }).then(data => {
+                  dadosCard = data
+      })
+      divInfos.innerHTML = `
+        <h1 class="titulo-carta">${dadosCard.nome}</h1>
+        <h3>Coleção:</h3>
+        <p>${dadosCard.colecao}</p>
+        <h3>Raridade:</h3>
+        <p>${dadosCard.raridade}</p>
+        <h3>Tipo:</h3>
+        <p>${dadosCard.tipo}</p>
+        <h3>Valor estimado:</h3>
+        <p>R$ ${dadosCard.valor}</p>
+        <h3>Categoria:</h3>
+        <p>${dadosCard.categoria}</p>
+        <a href="../cardsPokemon.html" class="btn-voltar">Adicionar ao Carrinho</a>
+      `
+      divfoto.innerHTML = `
+        <img src="${dadosCard.url_imagem}" alt="${dadosCard.nome}"/>
+      `
+    })
   </script>
+</head>
+<body>
+  <section class="sessao">
+    <div class="detalhes">
+      <div class="foto">
+      </div>
+      <div class="infos" id="infos">
+        <a href="../cardsPokemon.html" class="btn-voltar">Adicionar ao Carrinho</a>
+      </div>
+    </div>
+  </section>
 </body>
 </html>
